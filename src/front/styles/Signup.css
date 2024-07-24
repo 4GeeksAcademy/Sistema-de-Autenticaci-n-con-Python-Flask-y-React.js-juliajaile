@@ -1,0 +1,9 @@
+body {
+    background-color:aquamarine;
+}
+
+.right-pic {
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+}

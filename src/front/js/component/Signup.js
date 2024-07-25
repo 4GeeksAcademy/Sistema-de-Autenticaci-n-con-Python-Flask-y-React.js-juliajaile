@@ -1,30 +1,25 @@
 import React from "react";
 import { } from "react-router-dom";
-import backgroundPic from "../../img/background-signup.png";
-import "../../styles/Singup.css";
+import "../../styles/Signup.css";
 
-export const Singup = () => {
+export const Signup = () => {
     return (
-        <div className="container-fluid">
-            <div className="jumbotron">
-                <div className="d-flex flex-row">
-                    <h1 className="display-4">Get started</h1>
-                    <p className="text-secondary">Already have an account?Sign in</p>
-                    <form>
-                        <div class="form-group">
+        <div className="container">
+            <div className="d-flex flex-column signUp-card w-50">
+                <div className="p-4">
+                    <h1 className="display-4 jaro-h1">Get started</h1>
+                    <p className="text-secondary">Already have an account? Sign in</p>
+                    <div>
+                        <div className="form-group mt-2">
                             <label for="exampleInputEmail1">Email address</label>
-                            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email"/>
+                            <input type="email" className="form-control" placeholder="Enter an email" />
                         </div>
-                        <div class="form-group">
+                        <div className="form-group mt-2">
                             <label for="exampleInputPassword1">Password</label>
-                            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password"/>
+                            <input type="password" className="form-control" placeholder="Password" />
                         </div>
-                        <button type="submit" class="btn btn-primary w-100">Sign Up</button>
-                    </form>
-                </div>
-                <div className="d-flex flex-row">
-                    <img className="bg right-pic" src={backgroundPic} />
-                    <h3 className="text-light">Have your own personal website</h3>
+                        <button type="submit" className="btn btn-primary w-100 mt-4 shadow-lg">Sign Up</button>
+                    </div>
                 </div>
             </div>
         </div>

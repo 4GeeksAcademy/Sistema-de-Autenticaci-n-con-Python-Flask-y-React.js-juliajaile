@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import "../../styles/Signup.css";
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import { RiLockPasswordLine } from "react-icons/ri";
+import { Context } from "../store/appContext";
 
 export const Signup = () => {
     const { actions } = useContext(Context);
@@ -30,11 +31,11 @@ export const Signup = () => {
                     </p>
                     <div>
                         <div className="form-group mt-2">
-                            <label for="exampleInputEmail1"><MdOutlineAlternateEmail /></label>
+                            <label><MdOutlineAlternateEmail /></label>
                             <input type="email" className="form-control" placeholder="Enter an email address" onChange={(e) => setEmail(e.target.value)} value={email} />
                         </div>
                         <div className="form-group mt-2">
-                            <label for="exampleInputPassword1"><RiLockPasswordLine /></label>
+                            <label><RiLockPasswordLine /></label>
                             <input type="password" className="form-control" placeholder="Enter a password" onChange={(e) => setPassword(e.target.value)} value={password} />
                         </div>
                         <input type="check" style={{ display: "none" }} aria-label="active" onChange={(e) => setIsActive(e.target.value)} value={isActive} />

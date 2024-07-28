@@ -36,4 +36,4 @@ export const Private = () => {
 	);
 };
 
-export default Privado;
+export default Private;

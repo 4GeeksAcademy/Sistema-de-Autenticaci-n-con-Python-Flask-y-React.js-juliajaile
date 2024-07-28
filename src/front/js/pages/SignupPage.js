@@ -3,7 +3,7 @@ import { Context } from "../store/appContext";
 import "../../styles/home.css";
 import { Signup } from "../component/Signup";
 
-export const Home = () => {
+export const SignupPage = () => {
 	const { store, actions } = useContext(Context);
 
 	return (

@@ -14,19 +14,32 @@ api = Blueprint('api', __name__)
 CORS(api)
 
 
-@api.route('/hello', methods=['POST', 'GET'])
-def handle_hello():
+@api.route('/signup', methods=['POST'])
+def create_user():
+    email = request.json.get('email', None)
+    password = request.json.get('password', None)
+    is_active = request.json.get('is_active', None)
 
-    response_body = {
-        "message": "Hello! I'm a message that came from the backend, check the network tab on the google inspector and you will see the GET request"
-    }
+    if not email or not password: 
+        return jsonify({"msg":"An email and a password are required"}), 400
+    
+    #Verificar si usuario ya existe
+    user = User.query.filter_by(email=email).first()
+    if user:
+        return jsonify({"msg":"This user already exists"}), 400
+    #Crear usuario y guardarlo en base de datos
+    new_user = User(email=email, password=password, is_active=is_active)
+    db.session.add(new_user)
+    db.commit()
+    #Crear un token
+    access_token = create_access_token(identity=new_user.id)
 
-    return jsonify(response_body), 200
+    return jsonify({"msg":"User created successfully", "access_token":access_token, "email":user.email}), 201
 
 
 # Crea una ruta para autenticar a los usuarios y devolver el token JWT
 # La función create_access_token() se utiliza para generar el JWT
-@api.route("/token", methods=["POST", "GET"])
+@api.route("/login", methods=["POST", "GET"])
 def create_token():
     email = request.json.get("email", None)
     password = request.json.get("password", None)
@@ -40,7 +53,7 @@ def create_token():
     
     # Crea un nuevo token con el id de usuario dentro
     access_token = create_access_token(identity=user.id)
-    return jsonify({ "token": access_token, "user_id": user.id })
+    return jsonify({ "token": access_token, "user_id": user.id, "email":user.email})
 
 
 
@@ -52,4 +65,4 @@ def protected():
     current_user_id = get_jwt_identity()
     user = User.query.get(current_user_id)
     
-    return jsonify({"id": user.id, "email": user.email }), 200
+    return jsonify({"id": user.id}), 200

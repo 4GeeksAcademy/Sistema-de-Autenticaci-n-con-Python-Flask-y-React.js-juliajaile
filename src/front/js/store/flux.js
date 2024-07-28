@@ -2,51 +2,72 @@ const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
 			message: null,
-			demo: [
-				{
-					title: "FIRST",
-					background: "white",
-					initial: "white"
-				},
-				{
-					title: "SECOND",
-					background: "white",
-					initial: "white"
-				}
-			]
+			token: sessionStorage.getItem("token") || null,
+			email: sessionStorage.getItem("email") || null
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
-			exampleFunction: () => {
-				getActions().changeColor(0, "green");
-			},
+			singUp: async(email, password, is_active) => {
+				const store = getStore();
+				try{
+					const response = await fetch(`${process.env.BACKEND_URL}/api/hello`,
+						{
+							method: 'POST',
+							body: JSON.stringify({email, password, is_active: is_active}),
+							headers: {"Content-Type": "application/json"}
+						});
+						
+						if(!response.ok) {
+							// Manejo de respuestas no exitosas del servidor
+							const errorData = await response.json();
+							console.log("Error", errorData);
+						}
+						const data = await response.json();
 
-			getMessage: async () => {
+						if(data.access_token){
+							sessionStorage.getItem("token", data.access_token);
+							sessionsStorage.getItem("email", data.email);
+							setStore({...store, token: data.access_token, email: data.email});
+							console.log("Success", data);
+						} else{
+							console.log("Token not received", data);
+						}
+
+				} catch (error){
+					console.log("Error loading message from backend", error);
+				}
+
+			},
+			logIn: async (email, password) => {
+				const store = getStore();
 				try{
 					// fetching data from the backend
-					const resp = await fetch(process.env.BACKEND_URL + "/api/hello")
-					const data = await resp.json()
-					setStore({ message: data.message })
-					// don't forget to return something, that is how the async resolves
-					return data;
+					const response = await fetch(`${process.env.BACKEND_URL}/api/hello`,{
+						method: 'POST',
+						body: JSON.stringify({email, password}),
+						headers: {"Content-Type": "application/json"}
+					})
+					const data = await response.json();
+					
+					if (data.token) {
+						//guardar info token en sessionStorage
+						sessionStorage.setItem("token", data.token)
+						sessionStorage.setItem("email", data.email)
+						setStore({...store, token:data.token, email:data.email})
+						console.log("Succes", data)
+					} else {
+						console.log("Token not received", data)
+					}
 				}catch(error){
 					console.log("Error loading message from backend", error)
 				}
 			},
-			changeColor: (index, color) => {
-				//get the store
+			logOut: () =>{
 				const store = getStore();
-
-				//we have to loop the entire demo array to look for the respective index
-				//and change its color
-				const demo = store.demo.map((elm, i) => {
-					if (i === index) elm.background = color;
-					return elm;
-				});
-
-				//reset the global store
-				setStore({ demo: demo });
+				sessionStorage.removeItem("token");
+				setStore({...store, token: '', email: ''});
 			}
+			
 		}
 	};
 };

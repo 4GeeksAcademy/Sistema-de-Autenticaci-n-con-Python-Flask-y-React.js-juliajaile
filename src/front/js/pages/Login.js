@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useNavigate} from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import { RiLockPasswordLine } from "react-icons/ri";
 
@@ -7,11 +7,12 @@ import { Context } from "../store/appContext";
 
 export const Login = () => {
 	const { store, actions } = useContext(Context);
-	const[email, setEmail] = useState('');
-	const[password, setPassword] = useState('')
+
+	const [email, setEmail] = useState('');
+	const [password, setPassword] = useState('');
 	const navigate = useNavigate();
 
-	const logIn = async (email, password) =>{
+	const logIn = async (email, password) => {
 		await actions.logIn(email, password);
 		navigate('/private');
 	}
@@ -25,13 +26,14 @@ export const Login = () => {
 						<div>
 							<div className="form-group mt-2">
 								<label><MdOutlineAlternateEmail /></label>
-								<input type="email" className="form-control" placeholder="Enter your email" />
+								<input type="email" className="form-control" placeholder="Enter your email" onChange={(e) => { setEmail(e.target.value) }} value={email} />
 							</div>
 							<div className="form-group mt-2">
 								<label><RiLockPasswordLine /></label>
-								<input type="password" className="form-control" placeholder="Enter your password" />
+								<input type="password" className="form-control" placeholder="Enter your password" onChange={(e) => { setPassword(e.target.value) }} value={password} />
 							</div>
-							<button onSubmit={()=> logIn(email, password)} type="submit" className="btn btn-primary w-100 mt-4 shadow-lg">Get logged in!</button>
+							<button onClick={() => logIn(email, password)} className="btn btn-primary w-100 mt-4 shadow-lg">Get logged in!</button>
+							<p className="text-secondary pb-5">Don't you have an account? <Link to="/" className="text-danger fw-bold text-decoration-none">Sign up!</Link></p>
 						</div>
 					</div>
 				</div>

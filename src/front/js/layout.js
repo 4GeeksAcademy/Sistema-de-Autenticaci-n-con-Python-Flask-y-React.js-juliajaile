@@ -24,8 +24,7 @@ const Layout = () => {
     return (
         <div>
             <BrowserRouter basename={basename}>
-                <ScrollToTop> 
-                    <Navbar />
+                <ScrollToTop>
                     <Routes>
                         <Route element={<SignupPage />} path="/" />
                         <Route element={<Login />} path="/login" />

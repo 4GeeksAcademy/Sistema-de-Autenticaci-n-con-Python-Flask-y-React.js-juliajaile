@@ -7,7 +7,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
-			singUp: async(email, password, is_active) => {
+			signUp: async(email, password, is_active) => {
 				const store = getStore();
 				try{
 					const response = await fetch(`${process.env.BACKEND_URL}/api/hello`,

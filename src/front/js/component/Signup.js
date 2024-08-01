@@ -14,7 +14,7 @@ export const Signup = () => {
 
     const signUp = async (email, password, isActive) => {
         await actions.signUp(email, password, isActive);
-        navigate('/login');
+        navigate('/private');
 
     }
 
@@ -24,9 +24,9 @@ export const Signup = () => {
                 <div className="p-4">
                     <h1 className="display-4 jaro-h1">Create an account</h1>
                     <p className="text-secondary">
-                        Already have one?
+                        Already have one?&nbsp;
                         <Link to="/login" className="text-danger fw-bold text-decoration-none">
-                            Sign in
+                            Log in!
                         </Link>
                     </p>
                     <div>
@@ -39,8 +39,7 @@ export const Signup = () => {
                             <input type="password" className="form-control" placeholder="Enter a password" onChange={(e) => setPassword(e.target.value)} value={password} />
                         </div>
                         <input type="check" style={{ display: "none" }} aria-label="active" onChange={(e) => setIsActive(e.target.value)} value={isActive} />
-                        <button type="submit" className="btn btn-primary w-100 mt-4 shadow-lg" onSubmit={() => signUp(email, password, isActive)}>Sign Up</button>
-                        <p className="text-secondary pb-5">Don't you have an account? <Link to="/" className="text-danger fw-bold text-decoration-none">Sign in!</Link></p>
+                        <button className="btn btn-primary w-100 mt-4 shadow-lg" onClick={() => signUp(email, password, isActive)}>Sign Up</button>
                     </div>
                 </div>
             </div>

@@ -5,7 +5,7 @@ from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User
 from api.utils import generate_sitemap, APIException
 from flask_cors import CORS
-from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity, JWTManager
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
 
 
 api = Blueprint('api', __name__)
@@ -14,27 +14,19 @@ api = Blueprint('api', __name__)
 CORS(api)
 
 
-@api.route('/signup', methods=['POST'])
-def create_user():
-    email = request.json.get('email', None)
-    password = request.json.get('password', None)
-    is_active = request.json.get('is_active', None)
-
-    if not email or not password: 
-        return jsonify({"msg":"An email and a password are required"}), 400
-    
-    #Verificar si usuario ya existe
-    user = User.query.filter_by(email=email).first()
-    if user:
-        return jsonify({"msg":"This user already exists"}), 400
-    #Crear usuario y guardarlo en base de datos
-    new_user = User(email=email, password=password, is_active=is_active)
-    db.session.add(new_user)
-    db.commit()
-    #Crear un token
-    access_token = create_access_token(identity=new_user.id)
-
-    return jsonify({"msg":"User created successfully", "access_token":access_token, "email":user.email}), 201
+@api.route("/registro", methods=["POST"])
+def registro():
+    body=request.get_json()
+    user=User.query.filter_by(email=body["email"]).first()
+    if user is None:
+        new_user=User(email=body["email"], password=body["password"], is_active=True)
+        db.session.add(new_user)
+        db.session.commit()
+        #Crear un token
+        access_token = create_access_token(identity=new_user.id)
+        return jsonify({"msg":"Usuario creado", "access_token":access_token}),200
+    else:
+         return jsonify({"msg":"Usuario ya existe"}), 401
 
 
 # Crea una ruta para autenticar a los usuarios y devolver el token JWT
